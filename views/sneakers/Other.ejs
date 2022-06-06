@@ -1,0 +1,176 @@
+<% layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<link href="../assets/index.css" rel="stylesheet" >
+
+<div class="container-md">
+    <div class="banner">
+        <img src="../img/other.jpg">
+        <img class="scroll" src="../img/scrolldown.gif" alt="description of gif"> 
+        <img class="scroll" src="../img/scrolldown.gif" alt="description of gif"> 
+        <img class="scroll" src="../img/scrolldown.gif" alt="description of gif"> 
+    </div>
+</div>
+
+
+<!-- 
+<div class="row">
+    <% for (let shoe of shoess) { %>
+        <div class="card col-sm-3-">
+            <img class="card-img-top" src= "../img/aj4.webp"; alt="Card image cap">
+          <div class="card-body">
+            <a href="/sneakers/<%= shoe._id %>" class="product-name"> <%= shoe.name %></a>
+            <p class="card-text">
+              Card text
+              <a href="#" class="btn btn-xs btn-outline btn-primary">Add to Cart <i class="fa fa-long-arrow-right"></i> </a>
+            </p>
+          </div>
+          
+        </div>
+    <% } %>
+  </div> -->
+
+ 
+  
+  <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for name of shoes">
+ 
+  <div class="container mt-3">
+    <div class="row reveal " id="myItems">
+     
+        <% for (let shoe of shoess) { %>
+        <div class="col-auto mb-4 cardss  ">
+            <div class="card" style="width: 12rem;">
+                <div class="card-body">
+                  <img class="card-img-top" src= "<%= shoe.images[0].url %>"; alt="../img/nophoto.jpeg">
+                  <h5 class="card-title"><a href="/sneakers/<%= shoe._id %>" class="product-name"> <%= shoe.name %></a></h5>
+                  <h6 class="card-size" ><%= shoe.size %></h6>
+                  <p class="card-text"> <%= shoe.location %></p>
+                  <p class="price">$<%= shoe.price %></p>
+                    
+                    <a href="#" class="btn btn-xs btn-outline btn-primary">Add to Cart <i class="fa fa-long-arrow-right"></i> </a>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+<div class="cd-cart cd-cart--empty js-cd-cart">
+  <a href="#0" class="cd-cart__trigger text-replace">
+    Cart
+    <ul class="cd-cart__count"> <!-- cart items count -->
+      <li>0</li>
+      <li>0</li>
+    </ul> <!-- .cd-cart__count -->
+  </a>
+
+  <div class="cd-cart__content">
+    <div class="cd-cart__layout">
+      <header class="cd-cart__header">
+        <h2>Cart</h2>
+        <span class="cd-cart__undo">Item removed. <a href="#0">Undo</a></span>
+      </header>
+      
+      <div class="cd-cart__body">
+        <ul>
+          <!-- products added to the cart will be inserted here using JavaScript -->
+        </ul>
+      </div>
+
+      <footer class="cd-cart__footer">
+        <a href="#0" class="cd-cart__checkout">
+          <em>Checkout - $<span>0</span>
+            <svg class="icon icon--sm" viewBox="0 0 24 24"><g fill="none" stroke="currentColor"><line stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="3" y1="12" x2="21" y2="12"/><polyline stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="15,6 21,12 15,18 "/></g>
+            </svg>
+          </em>
+        </a>
+      </footer>
+    </div>
+  </div> <!-- .cd-cart__content -->
+</div> <!-- cd-cart -->
+
+<div class="cd-cart__body">
+  <ul>
+    <li class="cd-cart__product">
+      <div class="cd-cart__image">
+        <a href="#0">
+          <img src="assets/img/product-preview.png" alt="placeholder">
+        </a>
+      </div>
+
+      <div class="cd-cart__details">
+        <h3 class="truncate"><a href="#0">Product Name</a></h3>
+
+        <span class="cd-cart__price">$25.99</span>
+
+        <div class="cd-cart__actions">
+          <a href="#0" class="cd-cart__delete-item">Delete</a>
+
+          <div class="cd-cart__quantity">
+            <label for="cd-product-productId">Qty</label>
+
+            <span class="cd-cart__select">
+              <select class="reset" id="cd-product-productId" name="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <!-- ... -->
+              </select>
+
+              <svg class="icon" viewBox="0 0 12 12"><polyline fill="none" stroke="currentColor" points="2,4 6,8 10,4 "/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- other products added to the cart -->
+  </ul>
+</div>
+
+<script>
+    function reveal() {
+  var reveals = document.querySelectorAll(".reveal");
+
+  for (var i = 0; i < reveals.length; i++) {
+    var windowHeight = window.innerHeight;
+    var elementTop = reveals[i].getBoundingClientRect().top;
+    var elementVisible = 150;
+
+    if (elementTop < windowHeight - elementVisible) {
+      reveals[i].classList.add("active");
+    } else {
+      reveals[i].classList.remove("active");
+    }
+  }
+}
+
+window.addEventListener("scroll", reveal);
+</script>
+
+
+<script>
+  function myFunction() {
+    var input, filter, cards, cardContainer, a, title, i;
+    input = document.getElementById("myFilter");
+    filter = input.value.toUpperCase();
+    cardContainer = document.getElementById("myItems");
+    cards = cardContainer.getElementsByClassName("cardss");
+    for (i = 0; i < cards.length; i++) {
+        title = cards[i].querySelector(".card-body h5.card-title");
+        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+            cards[i].style.display = "";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+<script>
+  function addProduct(target) {
+  // this is just a product placeholder
+  var productAdded = '<li class="cd-cart__product"><div class="cd-cart__image"><a href="#0"><img src="assets/img/product-preview.png" alt="placeholder"></a></div><div class="cd-cart__details"><h3 class="truncate"><a href="#0">Product Name</a></h3><span class="cd-cart__price">$25.99</span><div class="cd-cart__actions"><a href="#0" class="cd-cart__delete-item">Delete</a><div class="cd-cart__quantity"><label for="cd-product-'+ productId +'">Qty</label><span class="cd-cart__select"><select class="reset" id="cd-product-'+ productId +'" name="quantity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select><svg class="icon" viewBox="0 0 12 12"><polyline fill="none" stroke="currentColor" points="2,4 6,8 10,4 "/></svg></span></div></div></div></li>';
+  cartList.insertAdjacentHTML('beforeend', productAdded);
+};
+</script>

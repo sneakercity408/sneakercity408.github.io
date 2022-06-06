@@ -1,0 +1,8 @@
+ 1. Reverted to Passport 5.0 so use this if update since logout is now an asyncronous 
+ 
+ req.logout(req.user, err => {
+        if (err) return next(err);
+        req.flash('success', 'logged out');
+        res.redirect("/sneakers");
+    });
+

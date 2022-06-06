@@ -1,0 +1,121 @@
+<% layout('layouts/boilerplate')%>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+    const shoess = <%- JSON.stringify(shoess) %>;
+</script>
+
+    <main class="container">
+
+        <!-- Left Column / Headphones Image -->
+        <div class="left-column">
+            <!-- <img data-image="black" src="" alt="../img/aj4.webp">
+            <img data-image="blue" src="../img/aj4c.webp" alt="../img/aj4.webp">
+            <img data-image="red" class="active" src="../img/aj4.webp" alt="../img/aj4.webp"> -->
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <% shoess.images.forEach((img, i) => { %> 
+                  <div class="carousel-item <%= i === 0 ? 'active' : ''  %>" >
+                    <img class="d-flex justify-content-start" id="prodimg" src="<%= img.url%>  " alt="">
+                  </div>
+                  <% }) %>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+        
+        <!-- Right Column -->
+        <div class="right-column">
+
+            <!-- Product Description -->
+            <div class="product-description">
+                <span>
+                    <%= shoess.brand %>
+                </span>
+                <h1>
+                    <%= shoess.name %>
+                </h1>
+                <h2>  <%= shoess.location %></h2>
+                <p> <%= shoess.description %></p>
+                <h3>Seller : <a href="mailto:<%= shoess.author.email %>"><%= shoess.author.username %></a>   </h3>
+            </div>
+
+            
+
+            <!-- Product Pricing -->
+            <div class="product-price">
+                <span>$<%= shoess.price %></span>
+                <a href="#" method="POST" class="cart-btn">Add to cart</a>
+                <% if (currentUser && shoess.author.equals(currentUser.id)) { %>
+                    <form action="<%=shoess._id%>?_method=DELETE" method="POST">
+                        <button class="del-btn">DELETE</button>
+                    </form>
+                    <% } %>
+
+            </div>
+            <% if (currentUser && shoess.author.equals(currentUser.id)) { %>
+                <div class="d-flex flex-row-reverse">
+                    <div class="p-2">
+                        <form action="/sneakers/<%= shoess._id  %>/edit " method="Get">
+                            <button class="edit-btn">Edit</button>
+                        </form>
+                    </div>
+                    <% } %>
+
+                </div>
+        </div>
+        
+    </main>
+    <div id='map' style='width: 1000px; height: 500px;'></div>
+    <!-- Scripts -->
+    <script src="./Tutorial_files/jquery.min.js" charset="utf-8"></script>
+    <script src="./Tutorial_files/script.js" charset="utf-8"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css' rel='stylesheet' />
+    <link href="../assets/s1.css" rel="stylesheet">
+
+    <script>
+        
+        $(document).ready(function () {
+
+            $('.color-choose input').on('click', function () {
+                var headphonesColor = $(this).attr('data-image');
+
+                $('.active').removeClass('active');
+                $('.left-column img[data-image = ' + headphonesColor + ']').addClass('active');
+                $(this).addClass('active');
+            });
+
+        });
+    </script>
+
+<script>
+    mapboxgl.accessToken = '<%-process.env.MAPBOX_TOKEN%>';
+    const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: shoess.geometry.coordinates, // starting position [lng, lat]
+    zoom: 11 // starting zoom
+    });
+
+    new mapboxgl.Marker()
+    .setLngLat( shoess.geometry.coordinates)
+    .setPopup(
+        new mapboxgl.Popup({offset: 25})
+            .setHTML (
+                `<h3>${shoess.name}</h3>`
+            )
+    )
+    .addTo(map)
+    </script>
